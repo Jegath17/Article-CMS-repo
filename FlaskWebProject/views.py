@@ -13,6 +13,18 @@ from FlaskWebProject.models import User, Post
 import msal
 import uuid
 
+import msal
+
+CLIENT_ID = Config.CLIENT_ID
+AUTHORITY = Config.AUTHORITY
+
+def _build_msal_app(cache=None):
+    return msal.ConfidentialClientApplication(
+        CLIENT_ID,
+        authority=AUTHORITY,
+        client_credential=Config.CLIENT_SECRET
+    )
+
 imageSourceUrl = 'https://'+ app.config['BLOB_ACCOUNT']  + '.blob.core.windows.net/' + app.config['BLOB_CONTAINER']  + '/'
 
 @app.route('/')
@@ -41,7 +53,6 @@ def new_post():
         imageSource=imageSourceUrl,
         form=form
     )
-
 
 @app.route('/post/<int:id>', methods=['GET', 'POST'])
 @login_required
